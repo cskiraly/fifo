@@ -70,8 +70,9 @@ int main(int argc, char *argv[])
         ssize_t size;
         size_t rmax;
         rmax = MIN(MIN(readsize, buf + bufsize - rpos), (wpos+bufsize-rpos-1) % bufsize);
+//fprintf(stderr,"reading %lu bytes, ", rmax);
         size = read(0, rpos, rmax);
-//fprintf(stderr,"reading %lu bytes, read %ld bytes\n", rmax, size);
+//fprintf(stderr,"read %ld bytes\n", size);
         if (size < 0) {
           break;
         } else if (size == 0)  {
@@ -85,8 +86,9 @@ int main(int argc, char *argv[])
         ssize_t size;
         size_t wmax;
         wmax = (wpos > rpos) ? (buf + bufsize) - wpos  : rpos - wpos;
+//fprintf(stderr,"writing %lu bytes, ", wmax);
         size = write(1, wpos, wmax);
-//fprintf(stderr,"writing %lu bytes, written %ld bytes\n", wmax, size);
+//fprintf(stderr,"written %ld bytes\n", size);
         if (size < 0) {
           break;
         } else {
