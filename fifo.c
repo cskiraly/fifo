@@ -9,6 +9,8 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #define MAX(a,b) ((a>b) ? a : b)
 #define MIN(a,b) ((a>b) ? b : a)
@@ -42,8 +44,15 @@ int main(int argc, char *argv[])
   fd_set rfds, wfds;
   int reof = 0;
   int retval;
+  int flags;
 
   cmdline_parse(argc, argv);
+
+  flags = fcntl(0, F_GETFL, 0);
+  fcntl(0, F_SETFL, flags | O_NONBLOCK);
+
+  flags = fcntl(1, F_GETFL, 0);
+  fcntl(1, F_SETFL, flags | O_NONBLOCK);
 
   buf = rpos = wpos = malloc(bufsize);
   if (!buf) {
