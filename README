@@ -1,0 +1,47 @@
+This is fifo: a simple replacement for the shell pipe (|)
+
+Usage
+-----
+
+./fifo [-b bufsize] [-r readsize]
+-b bufsize: set FIFO buffer size to bufsize bytes
+-r readsize: read in blocks of readsize bytes
+
+How does it work?
+-----------------
+
+fifo reads from stdin and writes everything it read to stdout
+immediately, just as the pipe (|) operator. Its only advantage to pipe
+is that it provides a configurable arbitrary sized fifo buffer. Its
+disadvantage is that it works in user space, but this is a little price
+to pay when the pipe would otherwise not provide enough buffering ;)
+
+Why is it needed?
+-----------------
+
+There are many ways of connecting process I/O under UNIX, the most
+common being the pipe (|) operator. Unfortunately, this operates with a
+limited buffer size and blocking I/O. Thus, it creates a very tight
+coupling between the two processes, blocking the feeder process when the
+consumer can't digest all the data. This is fine in some cases, but not
+in others.
+
+This tight coupling can be a real pain for multimedia applications such
+as ffmpeg, ffplay, vlc, mplayer, etc., where the feeder might provide
+data in big chunks, and the consumer might block for long times while
+trying to interpret the stream (e.g. figure out the format or the
+codec).
+
+Usage examples
+--------------
+
+Actually, fifo does not replace the pipe :), it has to be used with two
+pipes as follows:
+
+feeder | fifo | consumer
+
+It can be used where applications have some nasty buffering behavior,
+e.g. between dvbcat (that stalls on reception errors, then bursts after)
+and ffmpeg (that might load the CPU too much to handle the burst)/
+
+dvbcat -P dvb-t "BBC" | fifo | ffmpeg -i - a.avi
