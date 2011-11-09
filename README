@@ -1,4 +1,4 @@
-This is fifo: a simple replacement for the shell pipe (|)
+This is fifo: a simple replacement for the shell pipe (|) with increased buffer size
 
 Usage
 -----
@@ -42,6 +42,6 @@ feeder | fifo | consumer
 
 It can be used where applications have some nasty buffering behavior,
 e.g. between dvbcat (that stalls on reception errors, then bursts after)
-and ffmpeg (that might load the CPU too much to handle the burst)/
+and ffmpeg (that might load the CPU too much to handle the burst).
 
 dvbcat -P dvb-t "BBC" | fifo | ffmpeg -i - a.avi
