@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2010 Csaba Kiraly
+ *  Copyright (c) 2010-2011 Csaba Kiraly
  *
- *  This is free software; see gpl-3.0.txt
+ *  This is free software; see COPYING.GPLv3.txt
  */
 
 #include <stdio.h>
