@@ -20,21 +20,35 @@ size_t readsize = 1024 * 32;
 
 void *buf, *rpos, *wpos;
 
+static void usage(int argc, char *argv[])
+{
+  fprintf(stderr, "This is fifo: a simple replacement for the shell pipe (|)\n"\
+                  "Usage:\n"\
+                  "%s [-b bufsize] [-r readsize]\n"\
+                  "\t-b bufsize: set FIFO buffer size to bufsize bytes\n"\
+                  "\t-r readsize: read in blocks of readsize bytes\n",
+                  argv[0]
+         );
+}
+
 static void cmdline_parse(int argc, char *argv[])
 {
   int o;
 
-  while ((o = getopt(argc, argv, "b:r:")) != -1) {
+  while ((o = getopt(argc, argv, "b:r:h")) != -1) {
     switch(o) {
       case 'b':
         bufsize = atol(optarg);
       case 'r':
         readsize = atol(optarg);
         break;
+      case 'h':
+        usage(argc,argv);
+        exit(EXIT_SUCCESS);
       default:
         fprintf(stderr, "Error: unknown option %c\n", o);
-
-        exit(-1);
+        usage(argc,argv);
+        exit(EXIT_FAILURE);
     }
   }
 }
